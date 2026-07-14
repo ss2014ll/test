@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار تجريبي: المراقبة والاستطلاع</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        .quiz-container { max-width: 700px; margin: 30px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #1b4d3e; border-bottom: 2px solid #1b4d3e; padding-bottom: 10px; }
+        .question { margin-bottom: 25px; padding: 15px; background: #fafafa; border-right: 5px solid #1b4d3e; border-radius: 4px; }
+        .question-title { font-weight: bold; font-size: 1.1em; margin-bottom: 12px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { padding: 10px 15px; background: #fff; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        .option:hover { background: #eef5f2; border-color: #1b4d3e; }
+        .correct { background-color: #d4edda !important; border-color: #c3e6cb !important; color: #155724; font-weight: bold; }
+        .incorrect { background-color: #f8d7da !important; border-color: #f5c6cb !important; color: #721c24; }
+        .feedback { font-size: 0.9em; margin-top: 8px; font-style: italic; display: none; }
+        button { display: block; width: 100%; padding: 12px; background: #1b4d3e; color: white; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; margin-top: 20px; font-weight: bold; }
+        button:hover { background: #143a2f; }
+        #result { text-align: center; font-size: 1.3em; font-weight: bold; margin-top: 20px; color: #1b4d3e; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>اختبار مادة المراقبة والاستطلاع التكتيكي</h1>
+    <div id="quiz"></div>
+    <button onclick="checkAnswers()">إرسال الإجابات ومعرفة النتيجة</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    const questions = [
+        {
+            q: "ما هو النشاط الذي يُعرف بأنه مشاهدة مستمرة ولا يركز على هدف معين؟",
+            options: ["الاستطلاع", "المراقبة", "الكمين", "الاستطلاع بالقوة"],
+            answer: 1,
+            hint: "المراقبة مشاهدة مستمرة والتركز على هدف معين، بينما الاستطلاع محدود ومحدد الأهداف."
+        },
+        {
+            q: "في مواقف القتال النشطة، ما نوع التغطية المطلوبة للمراقبة التكتيكية؟",
+            options: ["تغطية دورية تكفي", "مراقبة متقطعة", "مراقبة مستمرة ومتواصلة", "مراقبة ليلاً فقط"],
+            answer: 2,
+            hint: "في المواقف النشطة تلزم مراقبة مستمرة، وفي المواقف الهادئة التغطية الدورية تكفي."
+        },
+        {
+            q: "أي مما يلي يُعد من وسائل المراقبة الأرضية الفنية التي تعتمد على نظام (دوبلر) لكشف الأهداف المتحركة فقط؟",
+            options: ["أجهزة الإحساس عن بعد", "نقاط التنصت", "رادارات المراقبة الأرضية", "التصوير الأرضي"],
+            answer: 2,
+            hint: "رادارات المراقبة الأرضية الحالية تعمل بنظام دوبلر وتكتشف الأهداف المتحركة فقط ولا تظهر الأهداف الثابتة."
+        },
+        {
+            q: "كم يبلغ حجم (قوة) نقطة الملاحظة والتنصت عادةً؟",
+            options: ["من 5 إلى 7 أفراد", "حضيرة كاملة", "من 2 إلى 3 أفراد", "فصيل مناورة"],
+            answer: 2,
+            hint: "حجم نقطة الملاحظة يتكون من 2 إلى 3 أفراد، ويجب وجود شخصين بصفة مستمرة."
+        },
+        {
+            q: "جهاز إحساس عن بعد يعتمد على تماسك التربة، ويكتشف تحرك الأفراد إلى 30 متراً والعربات إلى 300 متراً؟",
+            options: ["أجهزة الإحساس المغناطيسية", "أجهزة الإحساس الزلزالية (الاهتزازي)", "أجهزة الإحساس الصوتية", "الأشعة مادون الحمراء"],
+            answer: 1,
+            hint: "الجهاز الزلزالي يعتمد على الاهتزازات عبر الأرض وكلما كانت الأرض أصلب كان المدى أكبر."
+        },
+        {
+            q: "ما هو الإجراء الذي يُحظر تماماً على قادة الدوريات عمله عند الخروج للمهمة؟",
+            options: ["أخذ أجهزة اتصال مناسبة", "أخذ أدوات إسعاف أولية", "أخذ خطة الدوريات أو الشفاف المرفق معهم", "أخذ نواظير ليلية"],
+            answer: 2,
+            hint: "يُحظر تماماً أخذ خطة الدوريات أو الشفاف مع قادة الدوريات لتفادي وقوعها بيد العدو."
+        }
+    ];
+
+    function loadQuiz() {
+        const quizContainer = document.getElementById('quiz');
+        let output = '';
+        questions.forEach((q, qIdx) => {
+            output += `<div class="question" id="qN-${qIdx}">
+                <div class="question-title">${qIdx + 1}. ${q.q}</div>
+                <div class="options">`;
+            q.options.forEach((opt, oIdx) => {
+                output += `<label class="option">
+                    <input type="radio" name="question-${qIdx}" value="${oIdx}"> ${opt}
+                </label>`;
+            });
+            output += `</div><div class="feedback" id="fb-${qIdx}">${q.hint}</div></div>`;
+        });
+        quizContainer.innerHTML = output;
+    }
+
+    function checkAnswers() {
+        let score = 0;
+        questions.forEach((q, qIdx) => {
+            const selected = document.querySelector(`input[name="question-${qIdx}"]:checked`);
+            const questionElement = document.getElementById(`qN-${qIdx}`);
+            const feedbackElement = document.getElementById(`fb-${qIdx}`);
+            
+            feedbackElement.style.display = 'block';
+            
+            if (selected) {
+                const answerIdx = parseInt(selected.value);
+                if (answerIdx === q.answer) {
+                    score++;
+                    questionElement.classList.add('correct');
+                    questionElement.classList.remove('incorrect');
+                } else {
+                    questionElement.classList.add('incorrect');
+                    questionElement.classList.remove('correct');
+                }
+            } else {
+                questionElement.classList.add('incorrect');
+            }
+        });
+
+        const resultDiv = document.getElementById('result');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `نتيجتك هي: ${score} من ${questions.length}`;
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    loadQuiz();
+</script>
+</body>
+</html>
